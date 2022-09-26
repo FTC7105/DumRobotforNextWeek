@@ -40,7 +40,7 @@ public class RedAuto extends LinearOpMode {
     // UNITS ARE METERS
     double tagsize = 0.166;
 
-    int ID_TAG_OF_INTERESTA = 285; // Tag ID 18 from the 36h11 family
+    int ID_TAG_OF_INTERESTA = 285; // these are the numbers for the qr code, all of them should be right but it will only sense these three qr codes.
     int ID_TAG_OF_INTERESTB = 286;
     int ID_TAG_OF_INTERESTC = 287;
 
@@ -80,19 +80,23 @@ public class RedAuto extends LinearOpMode {
                     for (AprilTagDetection tag : currentDetections) {
                         if (tag.id == ID_TAG_OF_INTERESTA) {
                             tagOfInterest = tag;
-                            tagFound = true;
+                            tagFound = true;    // this if/else if statements are for the three different sensing levels also the tagFound boolean is not actually necessary
+                            telemetry.addData("Position 1", ID_TAG_OF_INTERESTA);
                             break;
                         } else if (tag.id == ID_TAG_OF_INTERESTB) {
                             tagOfInterest = tag;
                             tagFound = true;
+                            telemetry.addData("Position 2", ID_TAG_OF_INTERESTB);
                             break;
                         } else if (tag.id == ID_TAG_OF_INTERESTC) {
                             tagOfInterest = tag;
                             tagFound = true;
+                            telemetry.addData("Position 3", ID_TAG_OF_INTERESTC);
                             break;
                         }
                     }
                 }
+                telemetry.update();
             }
     }
 }
