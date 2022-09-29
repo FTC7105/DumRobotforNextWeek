@@ -41,7 +41,7 @@ public class RightStack extends LinearOpMode {
     double tagsize = 0.166;
 
     int ID_TAG_OF_INTERESTA = 285;
-    int ID_TAG_OF_INTERESTB = 286;
+    int ID_TAG_OF_INTERESTB = 254;
     int ID_TAG_OF_INTERESTC = 287;
 
     boolean tagFoundA = false;
@@ -134,38 +134,43 @@ public class RightStack extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(36, -65, Math.toRadians(180));
 
-        Trajectory DepoPreload2 = drive.trajectoryBuilder(startPose)
-                .strafeRight(40)
-                .build();
-        Trajectory PrepareForCycle = drive.trajectoryBuilder(new Pose2d(36, -24, Math.toRadians(180)))
-                .strafeRight(12)
+
+        Trajectory DepoPreload1 = drive.trajectoryBuilder(startPose)
+                .strafeRight(6)
                 .build();
 
-        Trajectory Backup = drive.trajectoryBuilder(new Pose2d(36, -24, Math.toRadians(180)))
-                .back(4)
+        Trajectory DepoPreload2 = drive.trajectoryBuilder(new Pose2d(36, -59, Math.toRadians(0)))
+                .strafeLeft(34)
                 .build();
-
-        Trajectory forward = drive.trajectoryBuilder(new Pose2d(32, -24, Math.toRadians(180)))
-                .forward(4)
-                .build();
-
-        Trajectory PickUp = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(180)))
-                .forward(19.5)
-                .build();
-
-        Trajectory dropoff1 = drive.trajectoryBuilder(new Pose2d(55.5, -12, Math.toRadians(180)))
-                .back(19)
-                .build();
-
-        Trajectory droppoff2 = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(180)))
+        Trajectory PrepareForCycle = drive.trajectoryBuilder(new Pose2d(36, -24, Math.toRadians(0)))
                 .strafeLeft(12)
                 .build();
 
-        Trajectory parkforA = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(180)))
+        Trajectory Backup = drive.trajectoryBuilder(new Pose2d(36, -24, Math.toRadians(0)))
+                .back(4)
+                .build();
+
+        Trajectory forward = drive.trajectoryBuilder(new Pose2d(32, -24, Math.toRadians(0)))
+                .forward(4)
+                .build();
+
+        Trajectory PickUp = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(0)))
+                .forward(19.5)
+                .build();
+
+        Trajectory dropoff1 = drive.trajectoryBuilder(new Pose2d(55.5, -12, Math.toRadians(0)))
+                .back(19)
+                .build();
+
+        Trajectory droppoff2 = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(0)))
+                .strafeRight(12)
+                .build();
+
+        Trajectory parkforC = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(0)))
                 .forward(23)
                 .build();
 
-        Trajectory parkforC = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(180)))
+        Trajectory parkforA = drive.trajectoryBuilder(new Pose2d(36, -12, Math.toRadians(0)))
                 .back(25)
                 .build();
 
@@ -185,6 +190,9 @@ public class RightStack extends LinearOpMode {
             fourbar.setPosition(fourbarlowpost);
             sleep(1000);
             // 4bar Low Post
+            drive.followTrajectory(DepoPreload1);
+
+            drive.turn(Math.toRadians(-180));
 
             drive.followTrajectory(DepoPreload2);
 
@@ -238,6 +246,10 @@ public class RightStack extends LinearOpMode {
             sleep(1000);
             // 4bar Low Post
 
+            drive.followTrajectory(DepoPreload1);
+
+            drive.turn(Math.toRadians(-180));
+
             drive.followTrajectory(DepoPreload2);
 
             drive.followTrajectory(Backup);
@@ -286,6 +298,11 @@ public class RightStack extends LinearOpMode {
             fourbar.setPosition(fourbarlowpost);
             sleep(1000);
             // 4bar Low Post
+
+            drive.followTrajectory(DepoPreload1);
+
+            drive.turn(Math.toRadians(-180));
+
             drive.followTrajectory(DepoPreload2);
 
             drive.followTrajectory(Backup);

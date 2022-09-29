@@ -47,7 +47,7 @@ public class RedAutoStack extends LinearOpMode {
     double tagsize = 0.166;
 
     int ID_TAG_OF_INTERESTA = 285;
-    int ID_TAG_OF_INTERESTB = 286;
+    int ID_TAG_OF_INTERESTB = 254;
     int ID_TAG_OF_INTERESTC = 287;
 
     boolean tagFoundA = false;
