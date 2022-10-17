@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -12,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MainTele extends LinearOpMode {
     
     double intergalSum = 0;
-    double KP = .01;
+    double KP = .03;
     double KI = 0;
     double KD = 0;
     ElapsedTime timer = new ElapsedTime();
@@ -24,9 +28,11 @@ public class MainTele extends LinearOpMode {
         DcMotor leftback;
         DcMotor rightfront;
         DcMotor rightback;
-        DcMotor fourbar;
-        CRServo rightintakeservo;
-        CRServo leftintakeservo;
+     //   DcMotor fourbar;
+      //  DcMotor rightslide;
+      //  DcMotor leftslide;
+       // DcMotor snapintake;
+     //   Servo snapclawservo;
 
          int ClawState = 0;
          boolean ClawStateTripper = false;
@@ -35,53 +41,88 @@ public class MainTele extends LinearOpMode {
 
 
 
-        leftfront = hardwareMap.get(DcMotor.class, "leftfront");
-        leftback = hardwareMap.get(DcMotor.class, "leftback");
-        rightfront = hardwareMap.get(DcMotor.class, "rightfront");
-        rightback = hardwareMap.get(DcMotor.class, "rightback");
-        fourbar = hardwareMap.get(DcMotor.class, "fourbar");
-        rightintakeservo = hardwareMap.get(CRServo.class, "rightintakeservo");
-        leftintakeservo = hardwareMap.get(CRServo.class, "leftintakeservo");
+      //  leftfront = hardwareMap.get(DcMotor.class, "leftfront");
+      //  leftback = hardwareMap.get(DcMotor.class, "leftback");
+       // rightfront = hardwareMap.get(DcMotor.class, "rightfront");
+       // rightback = hardwareMap.get(DcMotor.class, "rightback");
+     //   fourbar = hardwareMap.get(DcMotor.class, "fourbar");
+    //    rightslide = hardwareMap.get(DcMotor.class, "rightslide");
+    //    leftslide = hardwareMap.get(DcMotor.class, "leftslide");
+      //  snapintake = hardwareMap.get(DcMotor.class,"snapintake");
+      // snapclawservo = hardwareMap.get(Servo.class, "snapclawservo");
 
-        leftfront.setDirection(DcMotor.Direction.REVERSE);
-        rightfront.setDirection(DcMotor.Direction.FORWARD);
-        leftback.setDirection(DcMotor.Direction.REVERSE);
-        rightback.setDirection(DcMotor.Direction.FORWARD);
-        leftintakeservo.setDirection(CRServo.Direction.REVERSE);
+        MecanumDrive drive = new MecanumDrive(
+                new Motor(hardwareMap, "leftfront", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "rightfront", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "leftback", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "rightback", Motor.GoBILDA.RPM_312)
+        );
+
+       // rightslide.setDirection(DcMotor.Direction.REVERSE);
+     //   leftfront.setDirection(DcMotor.Direction.REVERSE);
+       // rightfront.setDirection(DcMotor.Direction.FORWARD);
+      //  leftback.setDirection(DcMotor.Direction.REVERSE);
+      //  rightback.setDirection(DcMotor.Direction.FORWARD);
+
+        RevIMU imu = new RevIMU(hardwareMap);
+        imu.init();
+
+        GamepadEx driverOp = new GamepadEx(gamepad1);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            int Speed = 1;
-            int DIRECTION = 1;
-            double Drive = -gamepad1.left_stick_y * DIRECTION;
-            double Strafe = gamepad1.left_stick_x * DIRECTION;
-            double Turn = gamepad1.right_stick_x * DIRECTION;
+           // int Speed = 1;
+           // int DIRECTION = 1;
+          //  double Drive = -gamepad1.left_stick_y * DIRECTION;
+        //    double Strafe = gamepad1.left_stick_x * DIRECTION;
+            //double Turn = gamepad1.right_stick_x * DIRECTION;
 
 
-            leftfront.setPower((Drive + Strafe + Turn) * Speed);
-            leftback.setPower((Drive - Strafe + Turn) * Speed);
-            rightfront.setPower((Drive - Strafe - Turn) * Speed);
-            rightback.setPower((Drive + Strafe - Turn) * Speed);
+           // leftfront.setPower((Drive + Strafe + Turn) * Speed);
+           // leftback.setPower((Drive - Strafe + Turn) * Speed);
+           // rightfront.setPower((Drive - Strafe - Turn) * Speed);
+           // rightback.setPower((Drive + Strafe - Turn) * Speed);
 
-            if (gamepad1.right_trigger >= .1) {
-                leftintakeservo.setPower(.7);
-                rightintakeservo.setPower(.7);
-            } else if (gamepad1.left_trigger >= .1) {
-                leftintakeservo.setPower(-.7);
-                rightintakeservo.setPower(-.7);
-            } else {
-                leftintakeservo.setPower(0);
-                rightintakeservo.setPower(0);
-            }
+            drive.driveFieldCentric(
+                    -driverOp.getLeftX(),
+                    -driverOp.getLeftY(),
+                    -driverOp.getRightX(),
+                    imu.getRotation2d().getDegrees(),
+                    false
+            );
 
-            if (gamepad1.right_bumper) {
-                fourbar.setPower(-.65);
-            } else if (gamepad1.left_bumper) {
-                fourbar.setPower(.5);
-            } else {
-                fourbar.setPower(0);
-            }
+//            if (gamepad1.right_trigger >= .1) {
+//                snapintake.setPower(-1);
+//            } else if (gamepad1.left_trigger >= .1) {
+//                snapintake.setPower(.7);
+//            } else {
+//                snapintake.setPower(0);
+//            }
+//
+//            if (gamepad1.dpad_up) {
+//                rightslide.setPower(-.5);
+//                leftslide.setPower(-.5);
+//            } else if (gamepad1.dpad_down) {
+//                rightslide.setPower(.3);
+//                leftslide.setPower(.3);
+//            } else {
+//                rightslide.setPower(0);
+//                leftslide.setPower(0);
+//            }
+//
+//            telemetry.addData("rightslide", rightslide.getCurrentPosition());
+//            telemetry.addData("leftslide", leftslide.getCurrentPosition());
+//            telemetry.addData("fourbar", fourbar.getCurrentPosition());
+//            telemetry.update();
+//
+//            if (gamepad1.right_bumper) {
+//                fourbar.setPower(-.65);
+//            } else if (gamepad1.left_bumper) {
+//                fourbar.setPower(.5);
+//            } else {
+//                fourbar.setPower(0);
+//            }
 
 
             // below is the code for our 3 week robot
